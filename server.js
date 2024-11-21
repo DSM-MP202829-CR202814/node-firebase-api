@@ -4,6 +4,7 @@ const port = 8383;
 
 // Import the event controller
 const eventsController = require('./src/events-controller');
+const usersController = require('./src/users-controller');
 
 // Middleware
 app.use(express.json());
@@ -18,6 +19,7 @@ app.get('/', async (req, res) => {
 
 // Routes
 app.use('/events', eventsController);
+app.use('/users', usersController);
 
 // Fallback for incorrect URLs
 app.use((req, res) => {

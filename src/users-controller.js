@@ -43,6 +43,34 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// Obtener usuario por email
+router.get('/userByEmail/:email', async (req, res) => {
+    try {
+        const { email } = req.params; // Extrae el email de los parámetros de la URL
+
+        if (!email) {
+            return res.status(400).send({ message: 'Email is required' });
+        }
+
+        const usersRef = db.collection('users');
+        const snapshot = await usersRef.where('email', '==', email).get();
+
+        if (snapshot.empty) {
+            return res.status(404).send({ message: 'User not found' });
+        }
+
+        // Suponemos que solo debería haber un usuario con ese email
+        let user = null;
+        snapshot.forEach(doc => {
+            user = { id: doc.id, ...doc.data() };
+        });
+
+        res.status(200).send(user);
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+});
+
 router.post('/', async (req, res) => {
     try {
         const userData = req.body;

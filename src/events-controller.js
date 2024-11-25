@@ -47,20 +47,24 @@ router.post('/', async (req, res) => {
     try {
         const eventData = req.body;
 
-        console.log("eventData", eventData)
+        console.log("eventData", eventData);
 
         if (!eventData || Object.keys(eventData).length === 0) {
             return res.status(400).send({ message: 'Invalid event data' });
         }
 
+        // Add the "usersCount" property with 0 and "comments" as an empty array
+        const eventWithDefaults = { ...eventData, usersCount: 0, comments: [] };
+
         const eventsRef = db.collection('events');
-        const newEvent = await eventsRef.add(eventData);
+        const newEvent = await eventsRef.add(eventWithDefaults);
 
         res.status(201).send({ message: 'Event created', id: newEvent.id });
     } catch (error) {
         res.status(500).send({ error: error.message });
     }
 });
+
 
 router.put('/:id', async (req, res) => {
     try {

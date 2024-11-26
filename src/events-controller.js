@@ -68,7 +68,7 @@ router.post('/', async (req, res) => {
 router.post('/:eventId/comments', async (req, res) => {
     try {
         const { eventId } = req.params;
-        const { comment } = req.body;
+        const comment = req.body;
 
         if (!comment) {
             return res.status(400).send({ message: 'Comment is required' });
